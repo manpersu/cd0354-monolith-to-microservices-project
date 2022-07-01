@@ -13,10 +13,14 @@ import { MenubarComponent } from './menubar/menubar.component';
 import { AuthModule } from './auth/auth.module';
 import { ApiService } from './api/api.service';
 
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
-    MenubarComponent
+    MenubarComponent,
+   
   ],
   entryComponents: [],
   imports: [
