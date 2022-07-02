@@ -27,7 +27,7 @@ script:
   - docker build -t reverseproxy ./reverseproxy
   - docker tag reverseproxy $DOCKER_USERNAME/reverseproxy
   - echo "reverseproxy build complete"
-  - echo "udagram-frontend build begins"
+  - echo " udagram-frontend build begins "
   - docker build -t udagram-frontend ./udagram-frontend
   - docker tag udagram-frontend $DOCKER_USERNAME/udagram-frontend
   - echo "udagram-frontend build complete"
