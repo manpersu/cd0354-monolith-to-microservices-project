@@ -1,0 +1,43 @@
+language: node_js
+node_js:
+  - 12
+
+services:
+  - docker
+
+# Pre-testing installs
+install:
+  - echo "Image build is about to begin!"
+
+# Scripts to be run such as tests
+before_script:
+  - echo "no tests needed for now!"
+
+script:
+  - docker --version # print the version for logging
+  - echo "Building udagram-api-user"
+  - docker build -t udagram-api-user .
+  - docker tag udagram-api-user $DOCKER_USERNAME/udagram-api-user:latest
+  - echo "udagram-api-user build complete"
+  - echo "udagram-api-feed build begins"
+  - docker build -t udagram-api-feed .
+  - docker tag udagram-api-feed $DOCKER_USERNAME/udagram-api-feed:latest
+  - echo "udagram-api-feed build complete"
+  - echo "reverseproxy build begins"
+  - docker build -t reverseproxy .
+  - docker tag reverseproxy $DOCKER_USERNAME/reverseproxy:latest
+  - echo "reverseproxy build complete"
+  - echo "udagram-frontend build begins"
+  - docker build -t udagram-frontend .
+  - docker tag udagram-frontend $DOCKER_USERNAME/udagram-frontend:latest
+  - echo "udagram-frontend build complete"
+  - echo "Image build successful"
+
+# Tasks to perform after the process is successful. Formatting the Docker username and password as below enables you to programmatically log in without having the password exposed in logs.
+after_success:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker push $DOCKER_USERNAME/udagram-api-user:latest
+  - docker push $DOCKER_USERNAME/udagram-api-feed:latest
+  - docker $DOCKER_USERNAME/reverseproxy:latest
+  - docker $DOCKER_USERNAME/udagram-frontend:latest
+
