@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: manpasu
+  name: manpasu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: manpasu
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: manpasu
+    spec:
+      containers:
+      - image: manpasu/udagram-api-feed:v2
+        name: udagram-api-feed
+        ports:
+        - containerPort: 8080
+        env:
+          - name: POSTGRES_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: k-secret
+                key: POSTGRES_USERNAME
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: k-secret
+                key: POSTGRES_PASSWORD
+          - name: aws_access_key_id
+            valueFrom:
+              secretKeyRef:
+                name: aws-secret
+                key: aws_access_key_id
+          - name: aws_secret_access_key
+            valueFrom:
+              secretKeyRef:
+                name: aws-secret
+                key: aws_secret_access_key
+        envFrom:
+        - configMapRef:
+            name: k-cluster-configmap
+        
